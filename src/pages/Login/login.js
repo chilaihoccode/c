@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind';
-import { useEffect,useState,useRef } from 'react'
+import { useState,useEffect } from 'react'
 import axios from 'axios';
+
+import validateForm from '~/services/validateForm';
 
 import styles from './login.module.scss'
 
@@ -8,18 +10,27 @@ const cx = classNames.bind(styles)
 
 function Login() {
     
-    const [username,usernameText] = useState('')
-    const [emailValue,setEmailValue] = useState('')
-    const [phone,phoneText] = useState('')
-    const [password,passwordText] = useState('')
-    const [confirmPassword,confirmPasswordText] = useState('')
+    const [username,setUsename] = useState('')
+    const [email,setEmail] = useState('')
+    const [phone,setPhone] = useState('')
+    const [password,setPassword] = useState('')
+    const [confirmPassword,setConfirmPassword] = useState('')
 
 
-    // useEffect(() => {
-    //     fetch('http://127.0.0.1:3000/api/get')
-    //     .then(data => data.json())
-    //     .then(res => console.log(res) )
-    // },[])
+    useEffect(() => {
+        fetch('http://127.0.0.1:3000/api/v1/get')
+        .then(data => data.json())
+        .then(res => console.log(res) )
+    },[])
+
+  
+
+        const handleRegister = async () => {
+            const data = {username,phone,email,password,confirmPassword}
+            validateForm(data)
+            // console.log('>> Check validate form',validateForm(data))
+       
+        }
 
 
     return ( 
@@ -68,36 +79,69 @@ function Login() {
                             <div className='row'>
                                 <div className="col-12 col-sm-6">
                                     <label htmlFor="username" className="col-form-label">username</label>
-                                    <input type="text" className="form-control" id="username" placeholder='username' />
+                                    <input 
+                                        value={username}
+                                        type="text" 
+                                        className="form-control" 
+                                        id="username" 
+                                        placeholder='username' 
+                                        onChange={e => setUsename(e.target.value)}
+                                    />
                                 </div>
                                 <div className="col-12 col-sm-6">
                                     <label htmlFor="phone" className="col-form-label">Phone munber</label>
-                                    <input type="munber" className="form-control" id="phone" placeholder='phone' />
+                                    <input 
+                                        value={phone}
+                                        type="munber" 
+                                        className="form-control" 
+                                        id="phone" 
+                                        placeholder='phone' 
+                                        onChange={e => setPhone(e.target.value)}
+                                    />
                                 </div>
                             </div>
                             <div className="">
                                     <label htmlFor="email" className="col-form-label">Email adress</label>
                                     <input 
-                                        value={emailValue}
+                                        value={email}
                                         type="email" 
                                         className="form-control" 
                                         id="email" 
                                         placeholder='email-adress' 
-                                        onChange={e => setEmailValue(e.target.value)}
+                                        onChange={e => setEmail(e.target.value)}
                                     />
                                 </div>
                             <div className="">
                                 <label htmlFor="password" className="col-form-label">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder='password' />
+                                <input 
+                                    value={password}
+                                    type="password" 
+                                    className="form-control"
+                                    id="password" 
+                                    placeholder='password' 
+                                    onChange={e => setPassword(e.target.value)}
+                                />
                             </div>
                             <div className="">
                                 <label htmlFor="comfirm-password" className="col-form-label">Confirm password</label>
-                                <input type='password' className='form-control' id='comfirm-password' placeholder='comfirm-password' />
+                                <input 
+                                    value={confirmPassword}
+                                    type='password' 
+                                    className='form-control' 
+                                    id='comfirm-password' 
+                                    placeholder='comfirm-password' 
+                                    onChange={e => setConfirmPassword(e.target.value)}
+                                />
                             </div>
                         </form>
                     </div>
                     <div className="modal-footer d-flex justify-content-center">
-                        <button type="button" className="btn btn-success">Dang Ki</button>
+                        <button 
+                            type="button" 
+                            className="btn btn-success"
+                            onClick={handleRegister}
+                        >Dang Ki
+                        </button>
                     </div>
                     </div>
                 </div>
