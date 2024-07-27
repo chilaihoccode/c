@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
-import axios from 'axios';
+import * as apiService from '~/apiServices/userService'
 
-const validateFrom = (data) => {
+const validateFrom = async (data) => {
 const formMail = /\w+([\.-]?\w+)*@\w+([\.-]?\w+)?(\.\w{2,3})+$/
 let result 
 const rules = {
@@ -78,9 +78,8 @@ const messageError = {
     }
 
     if(result) {
-        axios.post('http://127.0.0.1:3000/api/v1/register',{
-            data
-        })
+        const validValue = await apiService.createUser(data)
+        return validValue
     }
 }
 

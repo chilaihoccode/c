@@ -1,7 +1,9 @@
 import classNames from 'classnames/bind';
-import { useState,useEffect } from 'react'
-import axios from 'axios';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {toast} from 'react-toastify';
 
+import * as userService from '~/apiServices/userService'
 import validateForm from '~/services/validateForm';
 
 import styles from './login.module.scss'
@@ -9,28 +11,61 @@ import styles from './login.module.scss'
 const cx = classNames.bind(styles)
 
 function Login() {
-    
+    const defaultValidInput = {
+        inputLoginValid : true,
+        inputPasswordVaild : true
+    }
+    //State Login 
+    const [loginValue,setLoginValue] = useState('')
+    const [passwordValue,setPasswordValue] = useState('')
+    const [validInput,setValidInput] = useState(defaultValidInput)
+
+
+    //State Register 
     const [username,setUsename] = useState('')
     const [email,setEmail] = useState('')
     const [phone,setPhone] = useState('')
     const [password,setPassword] = useState('')
     const [confirmPassword,setConfirmPassword] = useState('')
 
-
-    useEffect(() => {
-        fetch('http://127.0.0.1:3000/api/v1/get')
-        .then(data => data.json())
-        .then(res => console.log(res) )
-    },[])
-
-  
-
-        const handleRegister = async () => {
-            const data = {username,phone,email,password,confirmPassword}
-            validateForm(data)
-            // console.log('>> Check validate form',validateForm(data))
-       
+    //handle Login Form 
+    const handleLogin = async () => {
+        if(!loginValue) {
+            toast.error('Email hoac username ko dc bo trong')
+            setValidInput({...defaultValidInput,inputLoginValid : false})
+            return;
         }
+        if(!passwordValue) {
+            toast.error('Password ko dc bo trong')
+            setValidInput({...defaultValidInput,inputPasswordVaild : false})
+            return;
+        }
+        
+        const data = {loginValue,passwordValue}
+
+        await userService.loginUser(data)
+
+    }
+
+
+    //handle Register Form
+    const handleRegister = async () => {
+        const data = {username,phone,email,password,confirmPassword}
+        const isCheckValid = await validateForm(data)
+        console.log('>> Check validate form',isCheckValid)
+        
+        if(+isCheckValid.EC === 1) {    
+            toast.error(isCheckValid.EM)
+        }else if(+isCheckValid.EC === 0) {
+            toast.success(isCheckValid.EM)
+            setUsename('')
+            setPassword('')
+            setPhone('')
+            setEmail('')
+            setConfirmPassword('')
+        }
+        
+    }
 
 
     return ( 
@@ -46,12 +81,23 @@ function Login() {
                         <div className={cx('container-form-login',"d-flex",'flex-column','gap-2')}>
                         <h4 className='text-primary d-block d-sm-none'>facebook</h4>
                             <input
+                                value={loginValue}
                                 type='text' 
-                                className='form-control' 
-                                placeholder='Email hoac so dien thoai'
+                                className={validInput.inputLoginValid ? 'form-control' : 'form-control is-invalid'} 
+                                placeholder='Email hoac username'
+                                onChange={e => setLoginValue(e.target.value)}
                              />
-                            <input type='password' className='form-control' placeholder='Mau khau' />
-                            <button className='btn btn-primary'>Dang nhap</button>
+                            <input 
+                                value={passwordValue}
+                                type='password' 
+                                className={validInput.inputPasswordVaild ? 'form-control' : 'form-control is-invalid'} 
+                                placeholder='Mau khau' 
+                                onChange={e => setPasswordValue(e.target.value)}    
+                            />
+                            <button 
+                                className='btn btn-primary'
+                                onClick={handleLogin}
+                            >Dang nhap</button>
                             <span className='text-center'><a href='#' className={cx('forget-text')}>Quen mat khau</a></span>
                             <hr></hr>
                             <div className='text-center'>
@@ -72,7 +118,13 @@ function Login() {
                             <h1 className="modal-title fs-5" id="registerModalLabel">Dang Ki</h1>
                             <span className={cx('detail-title')} >Nhanh chong va de dang</span>
                         </div>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button 
+                            type="button"  
+                    
+                            className="btn-close" 
+                            data-bs-dismiss="modal" 
+                            aria-label="Close"
+                        ></button>
                     </div>
                     <div className="modal-body px-3 py-1">
                         <form >
