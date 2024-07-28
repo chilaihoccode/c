@@ -2,14 +2,15 @@ import { useState,useRef } from "react";
 
 function About () {
     const inputElement = useRef()
+    let jobLocal = JSON.parse(localStorage.getItem('Job'))
 
     const [input,setInput] = useState('')
-    const [jobList,setJobList] = useState([])
-
+    const [jobList,setJobList] = useState(jobLocal || [])
+    
     const addJob = () => {
         setJobList(prev => {
             const newJob = [...prev,input]
-            // localStorage.setItem("Job",JSON.stringify(newJob))
+            localStorage.setItem("Job",JSON.stringify(newJob))
 
             return newJob
         })

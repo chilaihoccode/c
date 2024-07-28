@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState,useRef } from 'react'
+import { json, useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify';
 
 import * as userService from '~/apiServices/userService'
@@ -11,6 +11,11 @@ import styles from './login.module.scss'
 const cx = classNames.bind(styles)
 
 function Login() {
+    
+    const navigate = useNavigate()
+
+    const loginInput = useRef()
+
     const defaultValidInput = {
         inputLoginValid : true,
         inputPasswordVaild : true
@@ -43,7 +48,26 @@ function Login() {
         
         const data = {loginValue,passwordValue}
 
-        await userService.loginUser(data)
+        let isCheckLogin = await userService.loginUser(data)
+
+        // console.log('>> check Login', isCheckLogin)
+        if(+isCheckLogin.EC === 1) {
+            toast.error(isCheckLogin.EM)
+        }
+        if(+isCheckLogin.EC === 0) {
+            toast.success(isCheckLogin.EM)
+            // setLoginValue('')
+            // setPasswordValue('')
+            // loginInput.current.focus()
+            // navigate('/')
+
+            let data = {
+                isAuthenication : true,
+                token : 'fake token'
+            }
+            sessionStorage.setItem('Account',JSON.stringify(data))
+            navigate('/users')
+        }
 
     }
 
@@ -81,6 +105,7 @@ function Login() {
                         <div className={cx('container-form-login',"d-flex",'flex-column','gap-2')}>
                         <h4 className='text-primary d-block d-sm-none'>facebook</h4>
                             <input
+                                ref={loginInput}
                                 value={loginValue}
                                 type='text' 
                                 className={validInput.inputLoginValid ? 'form-control' : 'form-control is-invalid'} 
