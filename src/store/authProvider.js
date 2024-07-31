@@ -3,22 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { useEffect,useState } from 'react'
 import _ from 'lodash'
 
-function authContext({children}) {
+function AuthProvider({children}) {
 
     const navigate = useNavigate()
 
     useEffect(() => {
         let getToken = sessionStorage.getItem('Account')
-        const [authToken,setAuthToken] = useState(getToken || [])
+        const [authToken,setAuthToken] = useState(getToken)
         
-        if(getToken && !_.isEmpty(getToken) && getToken.isAuthenication) {
-            navigate('/user')
-            return
+        const unsubcrised = () => {
+            if(!authToken) {
+                navigate('/')
+                return
+            }
+          
         }
-        navigate('/')
 
+        //clear up function
         return () => {
-
+            unsubcrised()
         }
 
     },[])
@@ -26,4 +29,4 @@ function authContext({children}) {
     return ( <context.Provider value={authToken}>{children}</context.Provider> );
 }
 
-export default authContext;
+export default AuthProvider;
