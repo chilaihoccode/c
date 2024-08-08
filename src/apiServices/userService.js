@@ -22,4 +22,14 @@ const loginUser = async (data) => {
     }
 }
 
-export { createUser,loginUser }
+const getAllUser = async (page,limit) => {
+    try{
+        const responseData = await request.get(`users/watch/${page}&${limit}`)
+
+        return responseData
+    }catch(e) {
+        console.log(e)
+    }
+}
+
+export { createUser,loginUser,getAllUser }
