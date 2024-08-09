@@ -32,4 +32,17 @@ const getAllUser = async (page,limit) => {
     }
 }
 
-export { createUser,loginUser,getAllUser }
+const detroyUser = async (id) => {
+    try {
+        const responseData = await request.detroy('/users/destroy', {
+            data : {
+                id : id 
+            }
+        })
+        return responseData
+    }catch(e) {
+        console.log(e)
+    }
+}
+
+export { createUser,loginUser,getAllUser,detroyUser }

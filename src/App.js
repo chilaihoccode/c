@@ -7,6 +7,7 @@ import _ from 'lodash'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js'
+import 'bootstrap-icons/bootstrap-icons.svg'
 
 import Navbar from './components/Layout/Header/Nav';
 import { privateRoutes, publicRoutes } from './routes'; 

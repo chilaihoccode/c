@@ -17,5 +17,11 @@ export const post = async (path,options = {}) => {
     return reponse.data
 }
 
+export const detroy = async (path,options = {}) => {
+    const response = await request.delete(path,options)
+
+    return response.data
+}
+
 
 export default request
