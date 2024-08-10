@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import _ from 'lodash'
+import {toast} from 'react-toastify'
 
 import * as apiServices from '~/apiServices/userService'
 
@@ -42,7 +43,15 @@ function Users() {
     const handleDelete = async (index) => {
         const data = await apiServices.detroyUser(index)
 
-        console.log('>> check data delete',data)
+        // console.log('>> check data delete',data)
+        if(data.EC === 0) {
+            toast.success(data.EM)
+        }else{
+            toast.error(data.EM)
+        }
+
+        fetchApi()
+
     }
 
     TestToken()
