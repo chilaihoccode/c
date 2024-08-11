@@ -6,6 +6,14 @@ import {toast} from 'react-toastify'
 import * as groupService from '~/apiServices/groupService'
 
 function ModalCreate(props) {
+      //State Register 
+      const [username,setUsename] = useState('')
+      const [email,setEmail] = useState('')
+      const [phone,setPhone] = useState('')
+      const [password,setPassword] = useState('')
+      const [gender,setGender] = useState('')
+      const [group,setGroup] = useState('')
+
 
     const [dataGroup,setDataGroup] = useState({})
 

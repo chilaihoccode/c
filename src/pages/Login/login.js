@@ -56,10 +56,6 @@ function Login() {
         }
         if(+isCheckLogin.EC === 0) {
             toast.success(isCheckLogin.EM)
-            // setLoginValue('')
-            // setPasswordValue('')
-            // loginInput.current.focus()
-            // navigate('/')
 
             let data = {
                 isAuthenication : true,
