@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify'
-import * as apiService from '~/apiServices/userService'
 
 const validateFrom = async (data) => {
 const formMail = /\w+([\.-]?\w+)*@\w+([\.-]?\w+)?(\.\w{2,3})+$/
 let result 
+let isCheck = true
 const rules = {
     username : {
         require : true,
@@ -21,10 +21,13 @@ const rules = {
         require : true,
         minLength : 8
     },
-    confirmPassword : {
-        require : true,
-        compare_password : 'password'
-    }
+    groupID : {
+        require : true
+    },
+    // confirmPassword : {
+    //     require : true,
+    //     compare_password : 'password'
+    // },
 }
 
 const methodRules = {
@@ -54,8 +57,9 @@ const messageError = {
     email_regex : 'Email phai dung dinh dang',
     password_require : 'Password ko dc bo trong',
     password_minLength : 'Password phai hon 8 ki tu',
+    group_require : 'Group ko dc bo trong',
     confirmPassword_require : 'Confirm Password ko dc bo trong',
-    confirmPassword_compare_password : 'Confirm Password ko dung voi password'
+    confirmPassword_compare_password : 'Confirm Password ko dung voi password',
 }
 
     // console.log('>>Check data props',data)
@@ -68,19 +72,17 @@ const messageError = {
             // console.log('>> check rule value',ruleItems[ruleVaild])
             const params = ruleItems[ruleVaild]
             result = methodRules[ruleVaild](inputText,params)
-            console.log(result)
+            // console.log(result)
             let message = messageError[`${ruleName}_${ruleVaild}`]
             if(!result) {
                 notify(message)
+                isCheck = false
                 break;
             }
         }
     }
 
-    if(result) {
-        const validValue = await apiService.createUser(data)
-        return validValue
-    }
+    return isCheck
 }
 
 export default validateFrom

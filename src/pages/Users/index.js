@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import _ from 'lodash'
+import _, { flatMap } from 'lodash'
 import {toast} from 'react-toastify'
 import ModalDelete from "./ModalDelete";
 
@@ -17,12 +17,17 @@ const cx = classNames.bind(styles)
 
 function Users() {
     const [listUser,setListUser] = useState([])
+    //paginative
     const [currentPage,setCurrentPage] = useState(1)
     const [currentLimit,setCurrentLimit] = useState(2)
     const [totalPage,setTotalPage ] = useState(1)
-    const [show,setShow] = useState(false)
     
+    // modal 
+    const [action,setAction] = useState('')
+    const [show,setShow] = useState(false)
+    const [handleShowModle,setHandleShowModle] = useState(false)
     const [modalData,setModalData] = useState({})
+    const [modalDataEdit,setModalDataEdit] = useState({}) 
     
     useEffect(() => {
         fetchApi()
@@ -51,7 +56,8 @@ function Users() {
 
     const handleClose = () => {
         setShow(false)
-        setModalData({})
+        setHandleShowModle(false)
+        fetchApi()
     }
 
     const confirmDeleteData = async () => {
@@ -66,6 +72,24 @@ function Users() {
         }
     }
 
+    const handleAddUser = () => {
+        setModalDataEdit({})
+        setHandleShowModle(true)
+        setAction('Create')
+    }
+
+    const handleShowEdit = () => {
+        setHandleShowModle(true)
+        setAction('Update')
+    }
+
+    const handleEditUser = (user) => {
+        handleShowEdit()
+        // console.log('edit')
+        setModalDataEdit(user)
+        console.log('init data user ',user)
+    }
+
     TestToken()
     return ( 
         <>
@@ -74,7 +98,7 @@ function Users() {
                     <h1>Users Page</h1>
                     <div className="div-btn">
                         <button className="btn btn-success btn-sm mx-2">Refresh</button>
-                        <button className="btn btn-primary btn-sm">Add User</button>
+                        <button className="btn btn-primary btn-sm" onClick={handleAddUser}>Add User</button>
                     </div>
                 </div>
                 <table className="table table-light table-bordered table-sm mt-2">
@@ -91,19 +115,19 @@ function Users() {
                         {listUser && listUser.length > 0 ?
                             <>
                                 {listUser.map((data,index) => {
-                                    return(
+                                    return( 
                                         <tr key={`row-${index}`}>
-                                            <th scope="row">{index + 1}</th>
+                                            <th scope="row">{(currentPage - 1) * currentLimit + index + 1}</th>
                                             <td>{data.username}</td>
                                             <td>{data.email}</td>
                                             <td>{data.Group ? data.Group.name : ''}</td>
                                             <td>
                                                 <div className={cx('div-handle-btn','d-flex',)}>
-                                                    <button className="btn btn-outline-warning btn-sm mx-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                                    </svg>
+                                                    <button className="btn btn-outline-warning btn-sm mx-2" onClick={() => handleEditUser(data)} >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                            <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                                        </svg>
                                                         Edit
                                                     </button>
                                                     <button 
@@ -166,7 +190,10 @@ function Users() {
             />
 
             <ModalCreate 
-                title = 'Create new user'
+                action = {action}
+                handleShowModle = {handleShowModle}
+                handleClose = {handleClose}
+                modalDataEdit = {modalDataEdit}
             />
         </>
 

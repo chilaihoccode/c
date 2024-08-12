@@ -3,6 +3,7 @@ import { useState,useRef } from 'react'
 import { json, useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify';
 
+import * as apiService from '~/apiServices/userService'
 import * as userService from '~/apiServices/userService'
 import validateForm from '~/services/validateForm';
 
@@ -72,19 +73,22 @@ function Login() {
     const handleRegister = async () => {
         const data = {username,phone,email,password,confirmPassword}
         const isCheckValid = await validateForm(data)
-        console.log('>> Check validate form',isCheckValid)
-        
-        if(+isCheckValid.EC === 1) {    
-            toast.error(isCheckValid.EM)
-        }else if(+isCheckValid.EC === 0) {
-            toast.success(isCheckValid.EM)
-            setUsename('')
-            setPassword('')
-            setPhone('')
-            setEmail('')
-            setConfirmPassword('')
+        // console.log('>> Check validate form',isCheckValid)
+
+        if(isCheckValid === true) {
+            const validValue = await apiService.createUser(data)
+
+            if(+validValue.EC === 1) {    
+                toast.error(validValue.EM)
+            }else if(+validValue.EC === 0) {
+                toast.success(validValue.EM)
+                setUsename('')
+                setPassword('')
+                setPhone('')
+                setEmail('')
+                setConfirmPassword('')
+            }
         }
-        
     }
 
 
