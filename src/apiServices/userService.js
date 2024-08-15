@@ -45,4 +45,15 @@ const detroyUser = async (id) => {
     }
 }
 
-export { createUser,loginUser,getAllUser,detroyUser }
+const updateUser = async (data) => {
+    try {
+        const responseData = await request.update('/users/update',{
+            data : data
+        })
+        return responseData
+    }catch(e) {
+        console.log(e)
+    }
+}
+
+export { createUser,loginUser,getAllUser,detroyUser,updateUser }

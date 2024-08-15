@@ -4,12 +4,14 @@ import { useState,useEffect } from 'react';
 import {toast} from 'react-toastify'
 import _, { set } from 'lodash'
 import validateFrom from '~/services/validateForm';
+// import validateFromCreate from '~/services/validateFromCreate';
 import classNames from 'classnames/bind';
 
 
 import style from './user.module.scss'
 import * as groupService from '~/apiServices/groupService'
 import * as apiService from '~/apiServices/userService'
+
 
 const cx = classNames.bind(style)
 
@@ -85,22 +87,22 @@ function ModalCreate(props) {
     }
     
     const handleConfirmSubmit = async () => {
-        const isCheck = await validateFrom(userData)
+        let isCheck = validateFrom(userData)
         checkValidInput()
-        // console.log('>> check user data',userData)
-        // console.log('>> check isCheck :',isCheck)
-        if(isCheck) {
-            const response = await apiService.createUser(userData)
+        if(isCheck = true) {
+            let response = action === 'Create' ? await apiService.createUser(userData) : await apiService.updateUser(userData)
             console.log('check response :',response)
-            if(response.EC === 0) {
-                toast.success(response.EM)
-                props.handleClose(true)
-                setUserData(defaultUserData)
-            }else{
+
+            if(+response.EC != 0) {
                 toast.error(response.EM)
             }
+
+            toast.success(response.EM)
+            props.handleClose(true)
+            setUserData(defaultUserData)
         }
     }
+
 
     const handleChangeTypeInp = () => {
         setTypePass(typePass == 'password' ? 'text' : 'password')

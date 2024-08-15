@@ -24,10 +24,10 @@ const rules = {
     groupID : {
         require : true
     },
-    // confirmPassword : {
-    //     require : true,
-    //     compare_password : 'password'
-    // },
+    confirmPassword : {
+        require : true,
+        compare_password : 'password'
+    },
 }
 
 const methodRules = {
@@ -63,17 +63,37 @@ const messageError = {
 }
 
     // console.log('>>Check data props',data)
-    for( let ruleName in rules ) {
-        // console.log('>>Rolename', ruleName)
-        let inputText = data[ruleName]
-        // console.log('>> Input text',inputText)
-        let ruleItems = rules[ruleName]
+    // for( let ruleName in rules ) {
+    //     // console.log('>>Rolename', ruleName)
+    //     let inputText = data[ruleName]
+    //     // console.log('>> Input text',inputText)
+    //     let ruleItems = rules[ruleName]
+    //     for(let ruleVaild in ruleItems) {
+    //         // console.log('>> check rule value',ruleItems[ruleVaild])
+    //         const params = ruleItems[ruleVaild]
+    //         result = methodRules[ruleVaild](inputText,params)
+    //         // console.log(result)
+    //         console.log('>> check data frontend',data)
+    //         let message = messageError[`${ruleName}_${ruleVaild}`]
+    //         if(!result) {
+    //             notify(message)
+    //             isCheck = false
+    //             break;
+    //         }
+    //     }
+    // }
+
+    for(let i in data) {
+        // console.log('check i',i)
+        let inputText = data[i]
+        // console.log('>> rules[i]',rules[i])
+        let ruleItems = rules[i]
         for(let ruleVaild in ruleItems) {
-            // console.log('>> check rule value',ruleItems[ruleVaild])
             const params = ruleItems[ruleVaild]
             result = methodRules[ruleVaild](inputText,params)
             // console.log(result)
-            let message = messageError[`${ruleName}_${ruleVaild}`]
+            // console.log('>> check data frontend',data)
+            let message = messageError[`${i}_${ruleVaild}`]
             if(!result) {
                 notify(message)
                 isCheck = false
@@ -81,7 +101,7 @@ const messageError = {
             }
         }
     }
-
+    
     return isCheck
 }
 

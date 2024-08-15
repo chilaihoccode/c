@@ -23,5 +23,11 @@ export const detroy = async (path,options = {}) => {
     return response.data
 }
 
+export const update = async (path,options = {}) => {
+    const reponse = await request.put(path,options)
+
+    return reponse.data
+}
+
 
 export default request
