@@ -91,15 +91,15 @@ function ModalCreate(props) {
         checkValidInput()
         if(isCheck = true) {
             let response = action === 'Create' ? await apiService.createUser(userData) : await apiService.updateUser(userData)
-            console.log('check response :',response)
-
+            
             if(+response.EC != 0) {
                 toast.error(response.EM)
             }
-
+            
             toast.success(response.EM)
             props.handleClose(true)
             setUserData(defaultUserData)
+            console.log('check response :',response)
         }
     }
 
@@ -226,7 +226,7 @@ function ModalCreate(props) {
                     Close
                 </Button>
                 <Button variant="primary" onClick={handleConfirmSubmit} >
-                    Save Changes
+                    {action === 'Create' ? 'Save Change' : 'Update '}
                 </Button>
                 </Modal.Footer>
             </Modal>
