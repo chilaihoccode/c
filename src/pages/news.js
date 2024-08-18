@@ -22,7 +22,7 @@ function News () {
 
     return ( 
         <div className="container">
-            <h1>News</h1>
+            <h1 className="text-primary">News</h1>
             <h3>Time Out Clock</h3>
             <p>{timer}</p>
             <button className="btn btn-primary" onClick={handleStart}>start</button>

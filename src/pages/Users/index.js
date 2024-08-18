@@ -35,7 +35,7 @@ function Users() {
     const fetchApi = async () => {
         const dataUsers = await apiServices.getAllUser(+currentPage,+currentLimit)
         console.log(dataUsers)
-        if(dataUsers && dataUsers.DT && dataUsers.EC === 0) {
+        if(dataUsers && dataUsers.DT && +dataUsers.EC === 0) {
             setListUser(dataUsers.DT.users)   
             setTotalPage(dataUsers.DT.totalPages)         
         }
