@@ -5,6 +5,8 @@ const request = axios.create({
     baseURL : 'http://127.0.0.1:3000/api/v1/'
 })
 
+request.defaults.withCredentials = true
+
 export const get = async (path,options = {}) => {
     const reponse = await request.get(path,options)
 
