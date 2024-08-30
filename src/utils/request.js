@@ -3,7 +3,8 @@ import axios from "axios"
 const request = axios.create({
     baseURL : 'http://127.0.0.1:3000/api/v1/',
 })
-axios.defaults.withXSRFToken  = true
+request.defaults.withXSRFToken = true
+request.defaults.withCredentials = true
 
 export const get = async (path,options = {}) => {
     const reponse = await request.get(path,options)
