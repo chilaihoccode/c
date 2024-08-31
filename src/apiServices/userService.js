@@ -24,9 +24,7 @@ const loginUser = async (data) => {
 
 const getAllUser = async (page,limit) => {
     try{
-        const responseData = await request.get(`users/watch/${page}&${limit}`,{
-            withCredentials: true,
-        }
+        const responseData = await request.get(`users/watch/${page}&${limit}`
         )
 
         return responseData
