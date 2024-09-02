@@ -34,6 +34,10 @@ axios.interceptors.response.use(function (response) {
         case 400:
             // code block
             return Promise.reject(error);
+            case 403:
+                // code block
+                toast.error(`Forbidden. You don't permission this route`)
+                return Promise.reject(error);
         default:
             // code block
         return Promise.reject(error);

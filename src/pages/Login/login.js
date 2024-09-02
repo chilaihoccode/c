@@ -1,11 +1,12 @@
 import classNames from 'classnames/bind';
-import { useState,useRef } from 'react'
-import { json, useNavigate } from 'react-router-dom'
+import { useState,useRef, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify';
 
 import * as apiService from '~/apiServices/userService'
 import * as userService from '~/apiServices/userService'
 import validateForm from '~/services/validateForm';
+import { authContext } from '~/store/context';
 
 import styles from './login.module.scss'
 
@@ -16,6 +17,8 @@ function Login() {
     const navigate = useNavigate()
 
     const loginInput = useRef()
+
+    const { loginContext } = useContext(authContext)
 
     const defaultValidInput = {
         inputLoginValid : true,
@@ -52,18 +55,27 @@ function Login() {
         let isCheckLogin = await userService.loginUser(data)
 
         // console.log('>> check Login', isCheckLogin)
-        if(+isCheckLogin.EC === 1) {
-            toast.error(isCheckLogin.EM)
-        }
-        if(+isCheckLogin.EC === 0) {
+      
+        if(isCheckLogin && +isCheckLogin.EC === 0) {
             toast.success(isCheckLogin.EM)
+
+            const email = isCheckLogin.DT.accessToken.email
+            const username = isCheckLogin.DT.accessToken.username
+            const groupWithRole = isCheckLogin.DT.accessToken.groupWithRole
+            const token = isCheckLogin.DT.accessToken.token
 
             let data = {
                 isAuthenication : true,
-                token : 'fake token'
+                token,
+                account : {email,username,groupWithRole}
             }
+            loginContext(data)
             sessionStorage.setItem('Account',JSON.stringify(data))
             navigate('/users')
+        }
+
+        if(+isCheckLogin.EC === 1) {
+            toast.error(isCheckLogin.EM)
         }
 
     }

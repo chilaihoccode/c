@@ -1,32 +1,29 @@
-import { context } from "./context";
-import { useNavigate } from "react-router-dom";
-import { useEffect,useState } from 'react'
-import _ from 'lodash'
+import { authContext } from "./context";
+import { useState } from 'react'
 
 function AuthProvider({children}) {
+    const [userData,setUserData] = useState({
+        isAuthentication : false,
+        token : '',
+        account : {}
+    })
 
-    const navigate = useNavigate()
+    //Login
+    const loginContext = (data) => {
+        setUserData(data)
+    }
 
-    useEffect(() => {
-        let getToken = sessionStorage.getItem('Account')
-        const [authToken,setAuthToken] = useState(getToken)
-        
-        const unsubcrised = () => {
-            if(!authToken) {
-                navigate('/')
-                return
-            }
-          
-        }
+    //Logout
+    const logoutContext = () => {
+        setUserData({
+            isAuthentication : false,
+            token : '',
+            account : {}
+        })
+    }
 
-        //clear up function
-        return () => {
-            unsubcrised()
-        }
 
-    },[])
-
-    return ( <context.Provider value={authToken}>{children}</context.Provider> );
+    return ( <authContext.Provider value={{userData,loginContext,logoutContext}}>{children}</authContext.Provider> );
 }
 
 export default AuthProvider;
