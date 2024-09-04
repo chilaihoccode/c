@@ -12,10 +12,9 @@ import Navbar from './components/Layout/Header/Nav';
 import { privateRoutes, publicRoutes } from './routes'; 
 
 function App() {
-
   return (
     <div className="App">
-      <Navbar />
+        <Navbar />
         <Router>
           <Routes>
               {publicRoutes.map((route,index) => {

@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import _, { flatMap } from 'lodash'
+import _ from 'lodash'
 import {toast} from 'react-toastify'
 import ModalDelete from "./ModalDelete";
 

@@ -1,4 +1,19 @@
+import { useContext,useEffect,useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { authContext } from '~/store/context';
+import TestToken from '~/services/testToken';
+
 function Navbar () {
+  const { userData } = useContext(authContext)
+  let currentPath = window.location.pathname
+
+  // console.log('current path', currentPath === '/')
+
+
+
+  if(userData && userData.isAuthentication === true || currentPath === '/') {
+    console.log('okkkk')
     return ( 
         <nav className="navbar navbar-expand-lg bg-light">
         <div className="container-fluid">
@@ -28,6 +43,12 @@ function Navbar () {
         </div>
       </nav>
      );
+  }else {
+    <>
+    {TestToken()}
+    </>
+  }
+
 }
 
 export default Navbar;
