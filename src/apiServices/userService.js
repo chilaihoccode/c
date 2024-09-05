@@ -62,4 +62,13 @@ const updateUser = async (data) => {
     }
 }
 
-export { createUser,loginUser,getAllUser,detroyUser,updateUser }
+const account = async () => {
+    try{
+        const responseData = await request.get('/users/account')
+        return responseData
+    }catch(e){
+        console.log(e)
+    }
+}
+
+export { createUser,loginUser,getAllUser,detroyUser,updateUser,account }

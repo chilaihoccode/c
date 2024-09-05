@@ -70,7 +70,6 @@ function Login() {
                 account : {email,username,groupWithRole}
             }
             loginContext(data)
-            sessionStorage.setItem('Account',JSON.stringify(data))
             navigate('/users')
         }
 
