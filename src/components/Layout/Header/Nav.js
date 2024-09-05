@@ -35,6 +35,9 @@ function Navbar () {
                   <a className="nav-link" href="/login">Login</a>
                 </li>
                 <li className="nav-item">
+                  <a className="nav-link" href='/explore'>Explope</a>
+                </li>
+                <li className="nav-item">
                   <a className="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
               </ul>
